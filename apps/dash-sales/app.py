@@ -249,8 +249,8 @@ app.layout = html.Div(
 #         Input(component_id = "alpha-a", component_property = "value"),
 #     ],
 # )
-# def update_choro(alpha_r,alpha_f,alpha_m,alpha_a):
-#     return [alpha_r,alpha_f,alpha_m,alpha_a]
+def update_choro(alpha_r,alpha_f,alpha_m,alpha_a):
+    return [alpha_r,alpha_f,alpha_m,alpha_a]
 
 
 # Run the server
