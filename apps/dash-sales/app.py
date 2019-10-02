@@ -12,7 +12,6 @@ from datetime import datetime as dt
 import pathlib
 import plotly.graph_objs as go
 
-import pandas as pd
 
 # ============================== SETUP ============================== #
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -25,18 +24,6 @@ server = app.server
 app.config.suppress_callback_exceptions = True
 # ============================== DECLARATIONS ======================= #
 
-def generate_table(dataframe, max_rows=10):
-    return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in dataframe.columns])] +
-
-        # Body
-        [html.Tr([
-            html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
-        ]) for i in range(min(len(dataframe), max_rows))]
-    )
-
-
 # Sample data set parameters
 num_clients = 100
 time_frame = '2016-01-01', '2019-01-01'
@@ -45,19 +32,9 @@ num_transactions = 100
 avg_sale = 1000 # USD
 
 # RFM analysis
-# alpha = [0.3,0.3,0.2,0.2]
-
 n_groups = 5
 selected_columns = ['score','client_id','tenure','last_purchase','months_since_last','sales','segment']
-
 sales_data = create_random_data_set(time_frame , num_clients, num_transactions, num_products, avg_sale)
-
-# scores_table = run_RFM_analysis(sales_data,n_groups,alpha)#.set_index('score')
-# lime_table = scores_table.groupby('segment').median()[['recency_value','frequency_value','monetary_value']].reset_index()
-
-# health = (scores_table.groupby('segment').sum()['monetary_value']/scores_table.monetary_value.sum()).to_frame('sales_share')
-# health['size'] = scores_table.segment.value_counts(normalize=True)
-# health.reset_index(inplace=True)
 
 # ============================== LAYOUT ============================== #
 
@@ -173,7 +150,6 @@ app.layout = html.Div(
         Output(component_id='recency-lime-bar-chart', component_property='figure'),
         Output(component_id='frequency-lime-bar-chart', component_property='figure'),
         Output(component_id='sales-lime-bar-chart', component_property='figure'),
-
     ],
     [
         Input(component_id = "alpha-r", component_property = "value"),
@@ -273,7 +249,6 @@ def wrap_weight_and_run_analysis(alpha_r,alpha_f,alpha_m,alpha_a):
     }
 
     return health_chart_out,detailed_table_out,recency_lime_bar_chart_out,frequency_lime_bar_chart_out,sales_lime_bar_chart_out
-
 
 
 # Run the server
